@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseFirestore
 
 
 final class MainViewController: UIViewController {
@@ -25,13 +23,16 @@ final class MainViewController: UIViewController {
       return view
   }()
   
+  let firestoreService: RecipeServiceProtocol = FirestoreService()
+  var recipes: [Recipe] = []
+  
   override func loadView() {
       view = rootView
   }
   
   override func viewDidLoad() {
       super.viewDidLoad()
-      loadRecipes()
+      loadRecipesFromService()
       setupUI()
     
   }
@@ -39,27 +40,18 @@ final class MainViewController: UIViewController {
   private func setupUI() {
       view.backgroundColor = UIColor(named: "backgroundCream")
   }
-  
-  let db = Firestore.firestore()
-  var recipes: [Recipe] = []
 
-  func loadRecipes() {
-      db.collection("recipes").getDocuments { (snapshot, error) in
-          if let error = error {
-              print("Error getting documents: \(error)")
-          } else {
-              self.recipes = snapshot!.documents.map { (document) -> Recipe in
-                  let data = document.data()
-                  let id = document.documentID
-                  let title = data["title"] as? String ?? ""
-                  return Recipe(id: id, title: title)
+  func loadRecipesFromService() {
+          firestoreService.loadRecipes { [weak self] (recipes, error) in
+              guard let strongSelf = self else { return }
+              if let error = error {
+                  print("Error getting documents: \(error)")
+              } else if let recipes = recipes {
+                  strongSelf.recipes = recipes
+                  strongSelf.rootView.tableView.reloadData()
               }
-              self.rootView.tableView.reloadData()
           }
       }
-  }
-
-
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
