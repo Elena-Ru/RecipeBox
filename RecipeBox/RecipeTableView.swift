@@ -12,7 +12,7 @@ final class RecipeTableView: UITableView {
     // MARK: - Constants
     private enum Constants {
         static let cellIdentifier = RecipeTableViewCell.StyleConstants.identifier
-        static let backgroundColorName = "backgroundCream"
+        static let backgroundColor = "backgroundCream"
         static let sectionCornerRadius: CGFloat = 20.0
     }
 
@@ -31,7 +31,7 @@ final class RecipeTableView: UITableView {
         translatesAutoresizingMaskIntoConstraints = false
         register(RecipeTableViewCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
         tableFooterView = UIView()
-        backgroundColor = UIColor(named: Constants.backgroundColorName)
+        backgroundColor = UIColor(named: Constants.backgroundColor)
         contentInset = .zero
         layer.cornerRadius = Constants.sectionCornerRadius
         separatorStyle = .none
