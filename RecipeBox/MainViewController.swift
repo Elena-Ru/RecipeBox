@@ -26,14 +26,31 @@ final class MainViewController: UIViewController {
   let firestoreService: RecipeServiceProtocol = FirestoreService()
   var recipes: [Recipe] = []
   
+  let recipeImageURLs: [String: String] = [
+      "Mojito": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/%D0%BC%D0%BE%D1%85%D0%B8%D1%82%D0%BE.jpeg?alt=media&token=213e30e4-bf56-46f5-854c-02bd72820c0d",
+      "Tea": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/tea.jpeg?alt=media&token=61cded61-bae6-41ed-bbb7-39795cd1327e",
+      "Hurricane cocktail": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/hurricane_cocktail.jpeg?alt=media&token=cfad76cd-a5fa-4d5c-b811-280cc1ee56f6"
+  ]
+
+  
   override func loadView() {
       view = rootView
   }
   
   override func viewDidLoad() {
       super.viewDidLoad()
+      firestoreService.addIngredientsToRecipes()
+      firestoreService.updateRecipesWithImageURLs(recipeImageURLs: recipeImageURLs) { (error) in
+          if let error = error {
+              print("Ошибка обновления: \(error.localizedDescription)")
+          } else {
+              print("Документы успешно обновлены!")
+          }
+      }
       loadRecipesFromService()
       setupUI()
+    rootView.tableView.estimatedRowHeight = 120 // Предполагаемая высота
+    rootView.tableView.rowHeight = UITableView.automaticDimension // Автоматический расчет высоты
     
   }
 
@@ -66,7 +83,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.Constants.identifier, for: indexPath) as? RecipeTableViewCell else {
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.StyleConstants.identifier, for: indexPath) as? RecipeTableViewCell else {
         return UITableViewCell()
         
       }

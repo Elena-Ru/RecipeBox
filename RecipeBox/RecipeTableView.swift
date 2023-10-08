@@ -11,7 +11,7 @@ final class RecipeTableView: UITableView {
     
     // MARK: - Constants
     private enum Constants {
-        static let cellIdentifier = RecipeTableViewCell.Constants.identifier
+        static let cellIdentifier = RecipeTableViewCell.StyleConstants.identifier
         static let backgroundColorName = "backgroundCream"
         static let sectionCornerRadius: CGFloat = 20.0
     }
