@@ -8,17 +8,23 @@
 import UIKit
 
 final class RecipeTableViewCell: UITableViewCell {
+  
+  enum Constants {
+      static let cellTextColorName = "linkBlue"
+      static let cellFontSize: CGFloat = 18
+      static let cellBackgroundViewColorName = "softCream"
+      static let cellBackgroundViewCornerRadius: CGFloat = 20.0
+      static let identifier = "RecipeTableViewCell"
+  }
 
-    static let identifier = "RecipeTableViewCell"
-
-    func configure() {
-        textLabel?.text = MainViewController.Constants.cellText
-        textLabel?.textColor = UIColor(named: MainViewController.Constants.cellTextColorName)
-        textLabel?.font = UIFont.boldSystemFont(ofSize: MainViewController.Constants.cellFontSize)
+    func configure(with recipe: Recipe) {
+        textLabel?.text = recipe.title
+        textLabel?.textColor = UIColor(named: Constants.cellTextColorName)
+        textLabel?.font = UIFont.boldSystemFont(ofSize: Constants.cellFontSize)
 
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(named: MainViewController.Constants.cellBackgroundViewColorName)
-        backgroundView.layer.cornerRadius = MainViewController.Constants.cellBackgroundViewCornerRadius
+        backgroundView.backgroundColor = UIColor(named: Constants.cellBackgroundViewColorName)
+        backgroundView.layer.cornerRadius = Constants.cellBackgroundViewCornerRadius
         backgroundView.clipsToBounds = true
 
         self.backgroundView = backgroundView

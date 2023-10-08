@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseFirestore
+
 
 final class MainViewController: UIViewController {
   
@@ -13,11 +16,6 @@ final class MainViewController: UIViewController {
       static let numberOfSections = 5
       static let numberOfRows = 1
       static let footerHeight: CGFloat = 10.0
-      static let cellText = "text some"
-      static let cellTextColorName = "linkBlue"
-      static let cellFontSize: CGFloat = 18
-      static let cellBackgroundViewColorName = "softCream"
-      static let cellBackgroundViewCornerRadius: CGFloat = 20.0
   }
 
   lazy var rootView: MainRootView = {
@@ -33,19 +31,42 @@ final class MainViewController: UIViewController {
   
   override func viewDidLoad() {
       super.viewDidLoad()
+      loadRecipes()
       setupUI()
+    
   }
 
   private func setupUI() {
       view.backgroundColor = UIColor(named: "backgroundCream")
   }
+  
+  let db = Firestore.firestore()
+  var recipes: [Recipe] = []
+
+  func loadRecipes() {
+      db.collection("recipes").getDocuments { (snapshot, error) in
+          if let error = error {
+              print("Error getting documents: \(error)")
+          } else {
+              self.recipes = snapshot!.documents.map { (document) -> Recipe in
+                  let data = document.data()
+                  let id = document.documentID
+                  let title = data["title"] as? String ?? ""
+                  return Recipe(id: id, title: title)
+              }
+              self.rootView.tableView.reloadData()
+          }
+      }
+  }
+
+
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   
   func numberOfSections(in tableView: UITableView) -> Int {
-      return Constants.numberOfSections
+    return recipes.count
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,12 +74,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-      guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.identifier, for: indexPath) as? RecipeTableViewCell else {
+      guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.Constants.identifier, for: indexPath) as? RecipeTableViewCell else {
         return UITableViewCell()
         
       }
-    
-      cell.configure()
+      let recipe = recipes[indexPath.section]
+  
+      cell.configure(with: recipe)
   
       return cell
   }
