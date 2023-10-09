@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class MainViewController: UIViewController {
   
   struct Constants {
@@ -32,7 +31,6 @@ final class MainViewController: UIViewController {
 //      "Hurricane cocktail": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/hurricane_cocktail.jpeg?alt=media&token=cfad76cd-a5fa-4d5c-b811-280cc1ee56f6"
 //  ]
 
-  
   override func loadView() {
       view = rootView
   }
@@ -104,5 +102,3 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
       return footer
   }
 }
-
-
