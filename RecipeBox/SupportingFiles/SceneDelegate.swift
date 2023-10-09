@@ -18,8 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     let window = UIWindow(windowScene: windowScene)
 
-    window.rootViewController = MainViewController()
+    window.rootViewController = AnimatedLaunchScreen()
     window.makeKeyAndVisible()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+        window.rootViewController = MainViewController()
+    }
 
     self.window = window
   }
