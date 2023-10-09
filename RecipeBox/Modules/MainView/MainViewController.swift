@@ -7,12 +7,18 @@
 
 import UIKit
 
-final class MainViewController: UIViewController {
-  
+protocol MainViewProtocol: AnyObject {
+    func displayRecipes(_ recipes: [Recipe])
+    func showError(_ error: String)
+}
+
+final class MainViewController: UIViewController, MainViewProtocol {
+
   struct Constants {
       static let numberOfSections = 5
       static let numberOfRows = 1
       static let footerHeight: CGFloat = 10.0
+      static let cellHeight: CGFloat = 120
   }
 
   lazy var rootView: MainRootView = {
@@ -21,15 +27,10 @@ final class MainViewController: UIViewController {
       view.tableView.dataSource = self
       return view
   }()
-  
+  private var presenter: MainViewPresenter!
+  let imageService: ImageServiceProtocol = KingfisherImageService()
   let firestoreService: RecipeServiceProtocol = FirestoreService()
   var recipes: [Recipe] = []
-  
-//  let recipeImageURLs: [String: String] = [
-//      "Mojito": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/%D0%BC%D0%BE%D1%85%D0%B8%D1%82%D0%BE.jpeg?alt=media&token=213e30e4-bf56-46f5-854c-02bd72820c0d",
-//      "Tea": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/tea.jpeg?alt=media&token=61cded61-bae6-41ed-bbb7-39795cd1327e",
-//      "Hurricane cocktail": "https://firebasestorage.googleapis.com/v0/b/recipebox-7a825.appspot.com/o/hurricane_cocktail.jpeg?alt=media&token=cfad76cd-a5fa-4d5c-b811-280cc1ee56f6"
-//  ]
 
   override func loadView() {
       view = rootView
@@ -37,17 +38,15 @@ final class MainViewController: UIViewController {
   
   override func viewDidLoad() {
       super.viewDidLoad()
-//      firestoreService.addIngredientsToRecipes()
-//      firestoreService.updateRecipesWithImageURLs(recipeImageURLs: recipeImageURLs) { (error) in
-//          if let error = error {
-//              print("Ошибка обновления: \(error.localizedDescription)")
-//          } else {
-//              print("Документы успешно обновлены!")
-//          }
-//      }
+    
+      presenter = MainViewPresenter(
+        view: self,
+        firestoreService: firestoreService,
+        imageService: imageService
+      )
       loadRecipesFromService()
       setupUI()
-      rootView.tableView.estimatedRowHeight = 120
+      rootView.tableView.estimatedRowHeight = Constants.cellHeight
       rootView.tableView.rowHeight = UITableView.automaticDimension
     
   }
@@ -56,6 +55,15 @@ final class MainViewController: UIViewController {
       view.backgroundColor = UIColor(named: "backgroundCream")
   }
 
+  func showError(_ error: String) {
+      print("Error: \(error)")
+  }
+  
+  func displayRecipes(_ recipes: [Recipe]) {
+      self.recipes = recipes
+      self.rootView.tableView.reloadData()
+  }
+  
   func loadRecipesFromService() {
           firestoreService.loadRecipes { [weak self] (recipes, error) in
               guard let strongSelf = self else { return }
@@ -82,13 +90,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.StyleConstants.identifier, for: indexPath) as? RecipeTableViewCell else {
-        return UITableViewCell()
-        
+          return UITableViewCell()
       }
+      
       let recipe = recipes[indexPath.section]
-  
-      cell.configure(with: recipe)
-  
+      cell.configure(with: recipe, loadImage: presenter.loadImageForRecipe)
+      
       return cell
   }
 

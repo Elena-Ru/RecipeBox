@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class RecipeTableViewCell: UITableViewCell {
   
@@ -63,12 +64,14 @@ final class RecipeTableViewCell: UITableViewCell {
   }
 
   // MARK: - Configuration Methods
-  func configure(with recipe: Recipe) {
+  func configure(with recipe: Recipe, loadImage: @escaping (Recipe, @escaping (UIImage?) -> Void) -> Void) {
       titleLabel.text = recipe.title
-      loadImage(from: recipe.photo)
+      
+      loadImage(recipe) { [weak self] image in
+          self?.recipeImageView.image = image
+      }
       
       addShadow()
-    
       let backgroundView = UIView()
       backgroundView.backgroundColor = UIColor(named: StyleConstants.cellBackgroundViewColor)
       backgroundView.layer.cornerRadius = StyleConstants.cellBackgroundViewCornerRadius
@@ -119,23 +122,5 @@ final class RecipeTableViewCell: UITableViewCell {
       layer.shadowRadius = StyleConstants.shadowRadius
       clipsToBounds = false
       contentView.clipsToBounds = false
-  }
-
-  private func loadImage(from urlString: String) {
-    if let url = URL(string: urlString) {
-      DispatchQueue.global().async {
-        if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-          DispatchQueue.main.async {
-            self.recipeImageView.image = image
-            print("Image successfully loaded and set.")
-          }
-        } else {
-          print("Failed to load data from the URL.")
-        }
-      }
-    } else {
-      print("Invalid URL string: \(urlString)")
-      recipeImageView.image = nil
-    }
   }
 }
