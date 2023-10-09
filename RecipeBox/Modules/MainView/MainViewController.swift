@@ -108,4 +108,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
       footer.backgroundColor = .clear
       return footer
   }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      tableView.deselectRow(at: indexPath, animated: true)
+  }
 }
