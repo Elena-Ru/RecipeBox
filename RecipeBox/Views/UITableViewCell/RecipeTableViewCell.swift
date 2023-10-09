@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Kingfisher
+import SnapKit
 
 final class RecipeTableViewCell: UITableViewCell {
   
@@ -99,20 +99,22 @@ final class RecipeTableViewCell: UITableViewCell {
   }
   
   private func setupConstraints() {
-      NSLayoutConstraint.activate([
-        recipeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LayoutConstants.imageViewLeadingPadding),
-        recipeImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        recipeImageView.widthAnchor.constraint(equalToConstant: LayoutConstants.imageViewWidth),
-        recipeImageView.heightAnchor.constraint(equalToConstant: LayoutConstants.imageViewHeight),
-        recipeImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: LayoutConstants.generalTopPadding),
-        recipeImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: LayoutConstants.generalBottomPadding),
-        
-        titleLabel.leadingAnchor.constraint(equalTo: recipeImageView.trailingAnchor, constant: LayoutConstants.titleLabelLeadingPadding),
-        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: LayoutConstants.titleLabelTrailingPadding),
-        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: LayoutConstants.generalTopPadding),
-        titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: LayoutConstants.generalBottomPadding)
-      ])
+      recipeImageView.snp.makeConstraints { make in
+          make.leading.equalTo(contentView).offset(LayoutConstants.imageViewLeadingPadding)
+          make.centerY.equalTo(contentView)
+          make.width.equalTo(LayoutConstants.imageViewWidth)
+          make.height.equalTo(LayoutConstants.imageViewHeight)
+          make.top.greaterThanOrEqualTo(contentView).offset(LayoutConstants.generalTopPadding)
+          make.bottom.lessThanOrEqualTo(contentView).offset(LayoutConstants.generalBottomPadding)
+      }
+      
+      titleLabel.snp.makeConstraints { make in
+          make.leading.equalTo(recipeImageView.snp.trailing).offset(LayoutConstants.titleLabelLeadingPadding)
+          make.trailing.equalTo(contentView).offset(LayoutConstants.titleLabelTrailingPadding)
+          make.centerY.equalTo(contentView)
+          make.top.greaterThanOrEqualTo(contentView).offset(LayoutConstants.generalTopPadding)
+          make.bottom.lessThanOrEqualTo(contentView).offset(LayoutConstants.generalBottomPadding)
+      }
     }
   
   func addShadow() {

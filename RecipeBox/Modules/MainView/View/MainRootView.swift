@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class MainRootView: UIView {
   
@@ -46,21 +47,25 @@ final class MainRootView: UIView {
   }
   
   private func activateConstraints() {
-      NSLayoutConstraint.activate([
-        searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: LayoutConstants.topMargin),
-        searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: LayoutConstants.leadingMargin),
-        searchBar.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -LayoutConstants.spacingBetweenViews),
-        searchBar.heightAnchor.constraint(equalToConstant: LayoutConstants.searchBarHeight),
+       searchBar.snp.makeConstraints { make in
+           make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(LayoutConstants.topMargin)
+           make.leading.equalToSuperview().offset(LayoutConstants.leadingMargin)
+           make.trailing.equalTo(addButton.snp.leading).offset(-LayoutConstants.spacingBetweenViews)
+           make.height.equalTo(LayoutConstants.searchBarHeight)
+       }
 
-        addButton.widthAnchor.constraint(equalTo: addButton.heightAnchor),
-        addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: LayoutConstants.trailingMargin),
-        addButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
-        addButton.heightAnchor.constraint(equalTo: searchBar.heightAnchor),
-        
-        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: LayoutConstants.spacingBetweenViews),
-        tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: LayoutConstants.leadingMargin),
-        tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: LayoutConstants.trailingMargin),
-        tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-      ])
-  }
+       addButton.snp.makeConstraints { make in
+           make.width.equalTo(addButton.snp.height)
+           make.trailing.equalToSuperview().offset(LayoutConstants.trailingMargin)
+           make.centerY.equalTo(searchBar.snp.centerY)
+           make.height.equalTo(searchBar.snp.height)
+       }
+       
+       tableView.snp.makeConstraints { make in
+           make.top.equalTo(searchBar.snp.bottom).offset(LayoutConstants.spacingBetweenViews)
+           make.leading.equalToSuperview().offset(LayoutConstants.leadingMargin)
+           make.trailing.equalToSuperview().offset(LayoutConstants.trailingMargin)
+           make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+       }
+   }
 }
