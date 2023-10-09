@@ -8,13 +8,11 @@
 import Firebase
 import FirebaseFirestore
 
-
 protocol RecipeServiceProtocol {
     func loadRecipes(completion: @escaping ([Recipe]?, Error?) -> Void)
     func addIngredientsToRecipes()
-    func updateRecipesWithImageURLs(recipeImageURLs: [String: String], completion: @escaping (Error?) -> ())
+    func updateRecipesWithImageURLs(recipeImageURLs: [String: String], completion: @escaping (Error?) -> Void)
 }
-
 
 class FirestoreService: RecipeServiceProtocol {
     
@@ -37,7 +35,7 @@ class FirestoreService: RecipeServiceProtocol {
         }
     }
   
-  func addIngredientsToRecipes() {
+    func addIngredientsToRecipes() {
           let recipesCollection = db.collection("recipes")
 
           let mojitoIngredients = [
@@ -82,7 +80,7 @@ class FirestoreService: RecipeServiceProtocol {
           }
       }
   
-  func updateRecipesWithImageURLs(recipeImageURLs: [String: String], completion: @escaping (Error?) -> ()) {
+    func updateRecipesWithImageURLs(recipeImageURLs: [String: String], completion: @escaping (Error?) -> Void) {
       
       for (recipeTitle, imageURL) in recipeImageURLs {
           
@@ -104,4 +102,3 @@ class FirestoreService: RecipeServiceProtocol {
       completion(nil)
   }
 }
-
