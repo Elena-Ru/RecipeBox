@@ -12,6 +12,7 @@ protocol RecipeServiceProtocol {
     func loadRecipes(completion: @escaping ([Recipe]?, Error?) -> Void)
     func addIngredientsToRecipes()
     func updateRecipesWithImageURLs(recipeImageURLs: [String: String], completion: @escaping (Error?) -> Void)
+    func searchRecipes(query: String, completion: @escaping ([Recipe]?, Error?) -> Void)
 }
 
 class FirestoreService: RecipeServiceProtocol {
@@ -100,5 +101,22 @@ class FirestoreService: RecipeServiceProtocol {
       }
       
       completion(nil)
-  }
+    }
+  
+    func searchRecipes(query: String, completion: @escaping ([Recipe]?, Error?) -> Void) {
+        db.collection("recipes").whereField("title", isEqualTo: query).getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(nil, error)
+            } else {
+              let recipes = snapshot?.documents.compactMap { document -> Recipe? in
+                  let data = document.data()
+                  let id = document.documentID
+                  let title = data["title"] as? String ?? ""
+                  let photo = data["imageURL"] as? String ?? ""
+                  return Recipe(id: id, title: title, photo: photo)
+              }
+                completion(recipes, nil)
+            }
+        }
+    }
 }
