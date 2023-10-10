@@ -14,7 +14,7 @@ protocol ImageServiceProtocol {
 
 final class KingfisherImageService: ImageServiceProtocol {
   func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-      let placeholderImage = UIImage(named: "dish_placeholder")
+      let placeholderImage = Asset.dishPlaceholder.image
          if let url = URL(string: urlString) {
            let resource = KF.ImageResource(downloadURL: url)
              let option: KingfisherOptionsInfo = [.transition(.fade(0.2))]
