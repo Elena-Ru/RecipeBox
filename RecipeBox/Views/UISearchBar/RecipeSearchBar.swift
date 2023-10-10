@@ -11,7 +11,7 @@ final class RecipeSearchBar: UISearchBar {
 
     // MARK: - Constants
     private enum Constants {
-        static let placeholderText = "Search recipe"
+        static let placeholderText = L10n.search
         static let backgroundColorName = "lightCreamTextField"
         static let textColorName = "darkGreenText"
         static let searchFieldKey = "searchField"
