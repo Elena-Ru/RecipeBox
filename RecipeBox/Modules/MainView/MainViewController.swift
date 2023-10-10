@@ -48,7 +48,7 @@ final class MainViewController: UIViewController, MainViewProtocol {
       setupUI()
       rootView.tableView.estimatedRowHeight = Constants.cellHeight
       rootView.tableView.rowHeight = UITableView.automaticDimension
-    
+      rootView.searchBar.delegate = self
   }
 
   private func setupUI() {
@@ -112,4 +112,34 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       tableView.deselectRow(at: indexPath, animated: true)
   }
+}
+
+extension MainViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+          return
+        }
+      
+        searchRecipes(query: query)
+    }
+  
+    func searchRecipes(query: String) {
+       firestoreService.searchRecipes(query: query.lowercased()) { [weak self] (recipes, error) in
+            if let error = error {
+                print("Error searching recipes: \(error)")
+                self?.showError("Error searching recipes: \(error.localizedDescription)")
+            } else if let recipes = recipes {
+                self?.recipes = recipes
+                self?.rootView.tableView.reloadData()
+            }
+        }
+    }
+  
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            loadRecipesFromService()
+            rootView.tableView.reloadData()
+        }
+    }
+
 }

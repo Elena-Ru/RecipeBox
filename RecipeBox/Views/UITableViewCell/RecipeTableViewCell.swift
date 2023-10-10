@@ -65,7 +65,7 @@ final class RecipeTableViewCell: UITableViewCell {
 
   // MARK: - Configuration Methods
   func configure(with recipe: Recipe, loadImage: @escaping (Recipe, @escaping (UIImage?) -> Void) -> Void) {
-      titleLabel.text = recipe.title
+      titleLabel.text = recipe.title.capitalized
       
       loadImage(recipe) { [weak self] image in
           self?.recipeImageView.image = image
