@@ -11,9 +11,7 @@ final class RecipeSearchBar: UISearchBar {
 
     // MARK: - Constants
     private enum Constants {
-        static let placeholderText = "Search recipe"
-        static let backgroundColorName = "lightCreamTextField"
-        static let textColorName = "darkGreenText"
+        static let placeholderText = L10n.search
         static let searchFieldKey = "searchField"
     }
 
@@ -35,8 +33,8 @@ final class RecipeSearchBar: UISearchBar {
         backgroundImage = UIImage()
 
         if let textField = value(forKey: Constants.searchFieldKey) as? UITextField {
-            textField.backgroundColor = UIColor(named: Constants.backgroundColorName)
-            textField.textColor = UIColor(named: Constants.textColorName)
+            textField.backgroundColor = Asset.lightCreamTextField.color
+            textField.textColor = Asset.darkGreenText.color
         }
     }
 }

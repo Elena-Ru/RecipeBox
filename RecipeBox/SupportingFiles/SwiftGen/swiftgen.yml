@@ -1,0 +1,16 @@
+input_dir: ${PROJECT_DIR}/RecipeBox
+output_dir: ${PROJECT_DIR}/RecipeBox/SupportingFiles/SwiftGen
+
+#Assets
+xcassets:
+  inputs: SupportingFiles/Assets.xcassets
+  outputs:
+    templateName: swift5
+    output: Assets.swift
+
+#Strings
+strings:
+  inputs: SupportingFiles/en.lproj
+  outputs:
+    templateName: structured-swift5
+    output: Strings.swift

@@ -22,7 +22,7 @@ final class AnimatedLaunchScreen: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "backgroundCream")
+        view.backgroundColor = Asset.backgroundCream.color
         configureRotatingCircles()
         rotatingCicrlesView.animate(rotatingCicrlesView.circle1, counter: Constants.circle1Counter)
         rotatingCicrlesView.animate(rotatingCicrlesView.circle2, counter: Constants.circle2Counter)
