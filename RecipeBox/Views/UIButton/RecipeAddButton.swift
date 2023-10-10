@@ -13,7 +13,6 @@ final class RecipeAddButton: UIButton {
     private enum Constants {
         static let buttonTitle = "+"
         static let buttonTitleFont = UIFont.systemFont(ofSize: 24, weight: .bold)
-        static let backgroundColorName = "activeGreen"
         static let titleColor = UIColor.white
         static let cornerRadius: CGFloat = 20.0
     }
@@ -33,7 +32,7 @@ final class RecipeAddButton: UIButton {
         translatesAutoresizingMaskIntoConstraints = false
         setTitle(Constants.buttonTitle, for: .normal)
         titleLabel?.font = Constants.buttonTitleFont
-        backgroundColor = UIColor(named: Constants.backgroundColorName)
+        backgroundColor = Asset.activeGreen.color
         setTitleColor(Constants.titleColor, for: .normal)
         layer.cornerRadius = Constants.cornerRadius
         clipsToBounds = true

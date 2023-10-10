@@ -22,9 +22,7 @@ final class RecipeTableViewCell: UITableViewCell {
   }
 
   enum StyleConstants {
-      static let cellTextColor = "linkBlue"
       static let cellFontSize: CGFloat = 22
-      static let cellBackgroundViewColor = "softCream"
       static let cellBackgroundViewCornerRadius: CGFloat = 20.0
       static let identifier = "RecipeTableViewCell"
       static let shadowOpacity: Float = 0.2
@@ -45,7 +43,7 @@ final class RecipeTableViewCell: UITableViewCell {
    private let titleLabel: UILabel = {
       let label = UILabel()
       label.numberOfLines = 0
-      label.textColor = UIColor(named: StyleConstants.cellTextColor)
+      label.textColor = Asset.linkBlue.color
       label.font = UIFont.boldSystemFont(ofSize: StyleConstants.cellFontSize)
       label.translatesAutoresizingMaskIntoConstraints = false
       return label
@@ -73,7 +71,7 @@ final class RecipeTableViewCell: UITableViewCell {
       
       addShadow()
       let backgroundView = UIView()
-      backgroundView.backgroundColor = UIColor(named: StyleConstants.cellBackgroundViewColor)
+      backgroundView.backgroundColor = Asset.softCream.color
       backgroundView.layer.cornerRadius = StyleConstants.cellBackgroundViewCornerRadius
       backgroundView.clipsToBounds = true
       
@@ -118,7 +116,7 @@ final class RecipeTableViewCell: UITableViewCell {
     }
   
   func addShadow() {
-      layer.shadowColor = UIColor(named: StyleConstants.cellTextColor)?.cgColor
+      layer.shadowColor = Asset.linkBlue.color.cgColor
       layer.shadowOpacity = StyleConstants.shadowOpacity
       layer.shadowOffset = StyleConstants.shadowOffset
       layer.shadowRadius = StyleConstants.shadowRadius
