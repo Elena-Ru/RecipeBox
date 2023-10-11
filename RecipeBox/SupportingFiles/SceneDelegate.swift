@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mainVCBuilder: Builder = MainViewBuilder()
         let mainVC = mainVCBuilder.build()
 
-        window.rootViewController = mainVC
+        window.rootViewController = UINavigationController(rootViewController: mainVC)
     }
 
     self.window = window
