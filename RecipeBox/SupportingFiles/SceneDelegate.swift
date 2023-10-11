@@ -22,7 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     window.makeKeyAndVisible()
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-        window.rootViewController = MainViewController()
+        let mainVCBuilder: Builder = MainViewBuilder()
+        let mainVC = mainVCBuilder.build()
+
+        window.rootViewController = mainVC
     }
 
     self.window = window
