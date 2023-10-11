@@ -28,6 +28,7 @@ final class MainViewController: UIViewController, MainViewProtocol {
       return view
   }()
   var presenter: MainViewPresenter!
+  var router: MainViewRouterProtocol!
   let imageService: ImageServiceProtocol = KingfisherImageService()
   let firestoreService: RecipeServiceProtocol = FirestoreService()
   var recipes: [Recipe] = []
@@ -46,11 +47,16 @@ final class MainViewController: UIViewController, MainViewProtocol {
       )
       loadRecipesFromService()
       setupUI()
+      rootView.addButton.addTarget(self, action: #selector(addRecipe), for: .touchUpInside)
       rootView.tableView.estimatedRowHeight = Constants.cellHeight
       rootView.tableView.rowHeight = UITableView.automaticDimension
       rootView.searchBar.delegate = self
   }
 
+  @objc func addRecipe(sender: UIButton!) {
+      router.toAddNewRecipe()
+  }
+  
   private func setupUI() {
       view.backgroundColor = UIColor(named: "backgroundCream")
   }
@@ -111,6 +117,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       tableView.deselectRow(at: indexPath, animated: true)
+      router.toRecipeDetail()
   }
 }
 

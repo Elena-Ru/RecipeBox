@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class MainViewPresenter {
+final class MainViewPresenter {
     
     weak var view: MainViewProtocol?
     private let firestoreService: RecipeServiceProtocol
