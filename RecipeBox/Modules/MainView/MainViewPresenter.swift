@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewPresenter {
     
-    private weak var view: MainViewProtocol?
+    weak var view: MainViewProtocol?
     private let firestoreService: RecipeServiceProtocol
     private let imageService: ImageServiceProtocol
 

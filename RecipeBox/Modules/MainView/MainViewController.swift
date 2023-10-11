@@ -27,7 +27,7 @@ final class MainViewController: UIViewController, MainViewProtocol {
       view.tableView.dataSource = self
       return view
   }()
-  private var presenter: MainViewPresenter!
+  var presenter: MainViewPresenter!
   let imageService: ImageServiceProtocol = KingfisherImageService()
   let firestoreService: RecipeServiceProtocol = FirestoreService()
   var recipes: [Recipe] = []
