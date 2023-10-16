@@ -33,4 +33,14 @@ final class MainViewPresenter {
     func loadImageForRecipe(_ recipe: Recipe, completion: @escaping (UIImage?) -> Void) {
         imageService.loadImage(from: recipe.photo, completion: completion)
     }
+
+    func searchRecipes(query: String) {
+        firestoreService.searchRecipes(query: query.lowercased()) { [weak self] (recipes, error) in
+            if let error = error {
+                self?.view?.showError("Error searching recipes: \(error.localizedDescription)")
+            } else if let recipes = recipes {
+                self?.view?.displayRecipes(recipes)
+            }
+        }
+    }
 }
