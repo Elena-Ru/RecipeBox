@@ -6,19 +6,17 @@
 //
 
 import UIKit
+import Swinject
 
 final class MainViewBuilder: Builder {
     
     func build() -> UIViewController {
-        let view = MainViewController()
-        let router: Router & MainViewRouterProtocol = MainViewRouter()
-        let firestoreService: RecipeServiceProtocol = FirestoreService()
-        let imageService: ImageServiceProtocol = KingfisherImageService()
-        let presenter = MainViewPresenter(view: view, firestoreService: firestoreService, imageService: imageService)
-      
-        router.controller = view
+        guard let view = appContainer.resolve(MainViewProtocol.self) as? MainViewController,
+              let presenter = appContainer.resolve(MainViewPresenter.self) else {
+            fatalError("Error resolving dependencies for MainView")
+        }
+
         view.presenter = presenter
-        view.router = router
         
         return view
     }
