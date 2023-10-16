@@ -20,8 +20,7 @@ final class MainViewRouter: Router, MainViewRouterProtocol {
   }
   
   func toRecipeDetail() {
-    //create vc
-    //show(vc)
+      let recipeDetailVC = DetailViewController()
+      show(recipeDetailVC)
   }
 }
-
