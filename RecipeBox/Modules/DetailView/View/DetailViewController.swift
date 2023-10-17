@@ -35,14 +35,18 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
         dataSource = UICollectionViewDiffableDataSource<Section, RecipeItem>(collectionView: collectionView) {  (collectionView, indexPath, item) -> UICollectionViewCell? in
             switch item {
             case .image(let recipe):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier,  for: indexPath) as? RecipeImageCell else { return nil }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier, for: indexPath) as? RecipeImageCell else {
+                  return nil
+                }
                 self.imageService.loadImage(from: recipe.photo) { image in
                     cell.configure(with: image ?? Asset.dishPlaceholder.image)
                 }
                 return cell
   
             case .title(let recipe):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier,  for: indexPath) as? RecipeTitleCell else { return nil }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier, for: indexPath) as? RecipeTitleCell else {
+                  return nil
+                }
                 cell.configure(with: recipe.title.capitalized)
                 return cell
             }
@@ -65,6 +69,7 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
        
        switch section {
        case .image:
+         
          let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.5))
          let item = NSCollectionLayoutItem(layoutSize: itemSize)
          
@@ -90,7 +95,9 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
   
     // MARK: - Data Source
   private func configureDataSource() {
-      guard let recipe = recipe else { return }
+      guard let recipe = recipe else {
+        return
+      }
     
       var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeItem>()
       snapshot.appendSections([.image, .title])
