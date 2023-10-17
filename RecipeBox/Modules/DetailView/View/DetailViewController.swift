@@ -25,63 +25,91 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
         fatalError("init(coder:) has not been implemented")
     }
 
-  private var dataSource: UICollectionViewDiffableDataSource<Section, Recipe>!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, RecipeItem>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
         view.backgroundColor = Asset.backgroundCream.color
         setupCollectionView()
-      dataSource = UICollectionViewDiffableDataSource<Section, Recipe>(collectionView: collectionView) { (collectionView, indexPath, recipe) -> UICollectionViewCell? in
-          guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier, for: indexPath) as? RecipeImageCell else {
-              return nil
-          }
-          
-          self.imageService.loadImage(from: recipe.photo) { image in
-              cell.recipeImageView.image = image
-          }
-          return cell
-      }
+        dataSource = UICollectionViewDiffableDataSource<Section, RecipeItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+            switch item {
+            case .image(let recipe):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier, for: indexPath) as? RecipeImageCell else { return nil }
+                self.imageService.loadImage(from: recipe.photo) { image in
+                    cell.recipeImageView.image = image
+                }
+                return cell
+
+            case .title(let recipe):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier, for: indexPath) as? RecipeTitleCell else { return nil }
+                cell.titleLabel.text = recipe.title
+                return cell
+            }
+        }
         configureDataSource()
     }
   
-  // MARK: - UI Setup
-   private func setupCollectionView() {
-       collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-       collectionView.backgroundColor = .clear
-       collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-       collectionView.register(RecipeImageCell.self, forCellWithReuseIdentifier: RecipeImageCell.identifier)
-       view.addSubview(collectionView)
-   }
-   
+    // MARK: - UI Setup
+    private func setupCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.register(RecipeImageCell.self, forCellWithReuseIdentifier: RecipeImageCell.identifier)
+        collectionView.register(RecipeTitleCell.self, forCellWithReuseIdentifier: RecipeTitleCell.identifier)
+        view.addSubview(collectionView)
+    }
    private func createLayout() -> UICollectionViewLayout {
-       let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.5))
-       let item = NSCollectionLayoutItem(layoutSize: itemSize)
+     let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+       guard let section = Section(rawValue: sectionIndex) else { return nil }
+       
+       switch section {
+       case .image:
+         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.5))
+         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+         
+         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.5))
+         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+         
+         let section = NSCollectionLayoutSection(group: group)
+         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+         return section
 
-       let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.5))
-       let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-       let section = NSCollectionLayoutSection(group: group)
-       section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-
-       return UICollectionViewCompositionalLayout(section: section)
+       case .title:
+         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+         let section = NSCollectionLayoutSection(group: group)
+         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+         return section
+       }
+     }
+       return layout
    }
   
-  // MARK: - Data Source
-   private func configureDataSource() {
-       guard let recipe = recipe else { return }
-
-       let items = [recipe]
-       var snapshot = NSDiffableDataSourceSnapshot<Section, Recipe>()
-       snapshot.appendSections([.main])
-       snapshot.appendItems(items)
-       dataSource.apply(snapshot)
-   }
+    // MARK: - Data Source
+  private func configureDataSource() {
+      guard let recipe = recipe else { return }
+    
+      var snapshot = NSDiffableDataSourceSnapshot<Section, RecipeItem>()
+      snapshot.appendSections([.image, .title])
+      snapshot.appendItems([.image(recipe)], toSection: .image)
+      snapshot.appendItems([.title(recipe)], toSection: .title)
+      dataSource.apply(snapshot)
+  }
 }
 
 // MARK: - CollectionView Data Source
 extension DetailViewController {
-    enum Section {
-        case main
+    enum Section: Int, CaseIterable {
+        case image
+        case title
     }
+  
+  enum RecipeItem: Hashable {
+      case image(Recipe)
+      case title(Recipe)
+  }
+
 }
