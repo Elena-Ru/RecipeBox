@@ -17,11 +17,11 @@ class Router: BaseRouterProtocol {
     weak var controller: UIViewController!
     
     func show(_ controller: UIViewController) {
-        controller.show(controller, sender: nil)
+        self.controller.show(controller, sender: nil)
     }
     
     func present(_ controller: UIViewController) {
-        controller.present(controller, animated: true)
+        self.controller.present(controller, animated: true)
     }
     
     func setAsRoot(_ controller: UIViewController) {

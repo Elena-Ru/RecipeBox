@@ -14,7 +14,6 @@ final class RecipeAddButton: UIButton {
         static let buttonTitle = "+"
         static let buttonTitleFont = UIFont.systemFont(ofSize: 24, weight: .bold)
         static let titleColor = UIColor.white
-        static let cornerRadius: CGFloat = 20.0
     }
 
     // MARK: - Initializers
@@ -34,7 +33,7 @@ final class RecipeAddButton: UIButton {
         titleLabel?.font = Constants.buttonTitleFont
         backgroundColor = Asset.activeGreen.color
         setTitleColor(Constants.titleColor, for: .normal)
-        layer.cornerRadius = Constants.cornerRadius
+        layer.cornerRadius = LayoutGuidance.cornerRadius
         clipsToBounds = true
     }
 }

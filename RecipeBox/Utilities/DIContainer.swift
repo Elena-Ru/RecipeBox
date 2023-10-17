@@ -12,7 +12,7 @@ let appContainer = Container()
 
 func setupDependencies() {
     setupServices()
-    setupMVP()
+    setupMainModule()
 }
 
 private func setupServices() {
@@ -20,18 +20,14 @@ private func setupServices() {
     appContainer.register(RecipeServiceProtocol.self) { _ in FirestoreService() }
 }
 
-private func setupMVP() {
-    appContainer.register(MainViewRouterProtocol.self) { _ in MainViewRouter() }
-    .inObjectScope(.container)
+private func setupMainModule() {
+    appContainer.register(MainViewRouterProtocol.self) { _ in
+        let router = MainViewRouter()
+        return router
+    }
 
-    appContainer.register(MainViewProtocol.self) { resolver in
+    appContainer.register(MainViewProtocol.self) { _ in
         let controller = MainViewController()
-
-        guard let router = resolver.resolve(MainViewRouterProtocol.self) else {
-            fatalError("Unable to resolve MainViewRouterProtocol.")
-        }
-
-        controller.router = router
         return controller
     }.inObjectScope(.container)
 
@@ -43,5 +39,11 @@ private func setupMVP() {
               }
 
         return MainViewPresenter(view: view, firestoreService: firestoreService, imageService: imageService)
+    }
+  
+    if let controller = appContainer.resolve(MainViewProtocol.self) as? MainViewController,
+       let router = appContainer.resolve(MainViewRouterProtocol.self) as? MainViewRouter {
+        controller.router = router
+        router.controller = controller
     }
 }

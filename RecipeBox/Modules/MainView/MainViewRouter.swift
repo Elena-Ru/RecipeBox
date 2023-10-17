@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainViewRouterProtocol {
     func toAddNewRecipe()
-    func toRecipeDetail()
+    func toRecipeDetail(recipe: Recipe)
 }
 
 final class MainViewRouter: Router, MainViewRouterProtocol {
@@ -19,9 +19,8 @@ final class MainViewRouter: Router, MainViewRouterProtocol {
     //show(vc)
   }
   
-  func toRecipeDetail() {
-    //create vc
-    //show(vc)
+  func toRecipeDetail(recipe: Recipe ) {
+      let recipeDetailVC = DetailViewController(recipe: recipe, imageService: KingfisherImageService())
+      show(recipeDetailVC)
   }
 }
-

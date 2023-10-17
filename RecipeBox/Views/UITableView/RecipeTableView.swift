@@ -12,7 +12,6 @@ final class RecipeTableView: UITableView {
     // MARK: - Constants
     private enum Constants {
         static let cellIdentifier = RecipeTableViewCell.StyleConstants.identifier
-        static let sectionCornerRadius: CGFloat = 20.0
     }
 
     // MARK: - Initializers
@@ -32,7 +31,7 @@ final class RecipeTableView: UITableView {
         tableFooterView = UIView()
         backgroundColor = Asset.backgroundCream.color
         contentInset = .zero
-        layer.cornerRadius = Constants.sectionCornerRadius
+        layer.cornerRadius = LayoutGuidance.cornerRadius
         separatorStyle = .none
         clipsToBounds = true
     }
