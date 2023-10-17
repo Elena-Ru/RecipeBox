@@ -27,17 +27,25 @@ class RecipeTitleCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        addSubviews()
+        activateConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    private func addSubviews() {
         addSubview(titleLabel)
+    }
+  
+    private func activateConstraints() {
         titleLabel.snp.makeConstraints { (make) in
             make.edges.equalToSuperview().inset(Constants.edgeInsets)
         }
+    }
+  
+    func configure(with recipe: Recipe) {
+        titleLabel.text = recipe.title
     }
 }

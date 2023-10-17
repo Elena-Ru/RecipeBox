@@ -32,18 +32,18 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
     
         view.backgroundColor = Asset.backgroundCream.color
         setupCollectionView()
-        dataSource = UICollectionViewDiffableDataSource<Section, RecipeItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, RecipeItem>(collectionView: collectionView) {  (collectionView, indexPath, item) -> UICollectionViewCell? in
             switch item {
             case .image(let recipe):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier, for: indexPath) as? RecipeImageCell else { return nil }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeImageCell.identifier,  for: indexPath) as? RecipeImageCell else { return nil }
                 self.imageService.loadImage(from: recipe.photo) { image in
-                    cell.recipeImageView.image = image
+                    cell.configure(with: image ?? Asset.dishPlaceholder.image)
                 }
                 return cell
-
+  
             case .title(let recipe):
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier, for: indexPath) as? RecipeTitleCell else { return nil }
-                cell.titleLabel.text = recipe.title
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier,  for: indexPath) as? RecipeTitleCell else { return nil }
+                cell.configure(with: recipe)
                 return cell
             }
         }
