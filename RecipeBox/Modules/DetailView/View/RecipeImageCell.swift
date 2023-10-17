@@ -42,4 +42,8 @@ class RecipeImageCell: UICollectionViewCell {
             make.trailing.equalToSuperview()
         }
     }
+  
+    func configure(with image: UIImage) {
+            self.recipeImageView.image = image
+    }
 }
