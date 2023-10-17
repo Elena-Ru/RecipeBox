@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class RecipeImageCell: UICollectionViewCell {
     static let identifier = "RecipeImageCell"
@@ -21,22 +22,24 @@ class RecipeImageCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        addSubviews()
+        activateConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
+    private func addSubviews() {
         addSubview(recipeImageView)
-        
-        NSLayoutConstraint.activate([
-            recipeImageView.topAnchor.constraint(equalTo: topAnchor),
-            recipeImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            recipeImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            recipeImageView.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
     }
-
+  
+    private func activateConstraints() {
+        recipeImageView.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+    }
 }
