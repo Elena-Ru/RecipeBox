@@ -20,7 +20,7 @@ final class MainViewRouter: Router, MainViewRouterProtocol {
   }
   
   func toRecipeDetail(recipe: Recipe ) {
-      let recipeDetailVC = DetailViewController(recipe: recipe)
+      let recipeDetailVC = DetailViewController(recipe: recipe, imageService: KingfisherImageService())
       show(recipeDetailVC)
   }
 }
