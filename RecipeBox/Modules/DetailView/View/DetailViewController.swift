@@ -43,7 +43,7 @@ final class DetailViewController: UIViewController, RecipeDetailViewControllerPr
   
             case .title(let recipe):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeTitleCell.identifier,  for: indexPath) as? RecipeTitleCell else { return nil }
-                cell.configure(with: recipe)
+                cell.configure(with: recipe.title.capitalized)
                 return cell
             }
         }

@@ -45,7 +45,7 @@ class RecipeTitleCell: UICollectionViewCell {
         }
     }
   
-    func configure(with recipe: Recipe) {
-        titleLabel.text = recipe.title
+    func configure(with recipeTitle: String) {
+        titleLabel.text = recipeTitle
     }
 }
